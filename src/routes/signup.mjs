@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models/user.mjs';
 import { validationRequest } from '../middlewares/validate-request.mjs'
 import { BadRequestError } from '../errors/bad-request-error.mjs';
+import { Password } from '../services/password.mjs';
 
 const JWT_KEY = "abcdef" ; 
 
@@ -27,7 +28,8 @@ router.post('/api/users/signup',
 
     try {
         const email = req.body.email ;
-        const password = req.body.password ; 
+        const password = await Password.toHashAsync(req.body.password) ;
+        console.log(password, 'hashed version') ;
 
         const existingUser = await User.findOne({email: email});
         if(existingUser){
@@ -42,45 +44,19 @@ router.post('/api/users/signup',
 
         await newUser.save() ;
 
-        jwt.sign({
+        const token = jwt.sign({
             data: {
                 email: email,
                 password: password,
             }
-          }, JWT_KEY, { expiresIn: '0.1h' }, function(err, token){
-            // console.log(token, 'generated token') ;
-                if(err){
-                    throw new Error({message: err.message, statusCode: err.statusCode}) ;
-                }
-                req.session = {
-                    jwt : token,
-                }
-                // console.log(req.session, 'req.session') ;
-
-
-                req.session = {
-                    jwt : token,
-                }
-                res.status(201).send({message:"Success"}) ;
+          }, JWT_KEY, { expiresIn: '0.1h' }) ;
                 
 
 
-          });
-
-        // const token = jwt.sign({
-        //         data: {
-        //             email: email,
-        //             password: password,
-        //         }
-        //       }, JWT_KEY, { expiresIn: '0.1h' }
-        // );
-
-        // console.log(token, 'generated token') ;
-        
-        // req.session = {
-        //     jwt : token,
-        // }
-        // res.status(201).send({message:"Success"}) ;
+        req.session = {
+            jwt : token,
+        }
+        res.status(201).send({message:"Success"}) ;
         
 
     } catch (err){

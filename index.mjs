@@ -10,6 +10,7 @@ import cookieSession from 'cookie-session' ;
 // const mongoose = require('mongoose');
 import mongoose from 'mongoose';
 import { signuprouter } from './src/routes/signup.mjs';
+import { signinrouter } from './src/routes/signin.mjs';
 // const swaggerUi = require('swagger-ui-express');
 // const swaggerDocument = require('./swagger.json');
 // const fs = require('fs');
@@ -28,6 +29,7 @@ app.use(cors()) ;
 app.use(bodyParser.urlencoded({ extended: true })) ;
 app.use(bodyParser.json());
 app.use(signuprouter) ;
+app.use(signinrouter) ;
 
 
 const start = async () =>{
@@ -56,7 +58,9 @@ start() ;
 
 app.use((err, req,res,next) => {
     console.log(err) ;
-    res.status(err.statusCode || 500).send(err.serializeErrors() || "Internal Sever Error") ;
+    if(err && err.statusCode) res.status(err.statusCode).send( err.serializeErrors()) ;
+    else res.status(500).send([{message: err.message || "Internal Server Error"}]) ;
+    
     next() ;
 
 }) ;
