@@ -4,6 +4,7 @@
   "description": "authentication system using nodejs",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon ./index.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,18 @@
   "bugs": {
     "url": "https://github.com/infinitecreator/auth/issues"
   },
-  "homepage": "https://github.com/infinitecreator/auth#readme"
+  "homepage": "https://github.com/infinitecreator/auth#readme",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "body-parser": "^1.20.2",
+    "cookie-session": "^2.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.1.1",
+    "nodemon": "^3.0.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
+  }
 }
