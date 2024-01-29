@@ -11,6 +11,8 @@ import cookieSession from 'cookie-session' ;
 import mongoose from 'mongoose';
 import { signuprouter } from './src/routes/signup.mjs';
 import { signinrouter } from './src/routes/signin.mjs';
+import { signoutrouter } from './src/routes/signout.mjs';
+import { currentuserrouter } from './src/routes/current-user.mjs';
 // const swaggerUi = require('swagger-ui-express');
 // const swaggerDocument = require('./swagger.json');
 // const fs = require('fs');
@@ -30,6 +32,8 @@ app.use(bodyParser.urlencoded({ extended: true })) ;
 app.use(bodyParser.json());
 app.use(signuprouter) ;
 app.use(signinrouter) ;
+app.use(signoutrouter) ;
+app.use(currentuserrouter);
 
 
 const start = async () =>{
@@ -55,10 +59,15 @@ const start = async () =>{
 
 start() ;
 
+const jwtErrors = ['TokenExpiredError', 'JsonWebTokenError', 'NotBeforeError'] ;
 
 app.use((err, req,res,next) => {
-    console.log(err) ;
+
+//    console.log(err.name in jwtErrors, 'wow') ;
     if(err && err.statusCode) res.status(err.statusCode).send( err.serializeErrors()) ;
+    else if(err && jwtErrors.includes(err.name)){
+        res.status(401).send([{message: err.message}]) ;
+    }
     else res.status(500).send([{message: err.message || "Internal Server Error"}]) ;
     
     next() ;
