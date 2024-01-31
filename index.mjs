@@ -13,6 +13,9 @@ import { signuprouter } from './src/routes/signup.mjs';
 import { signinrouter } from './src/routes/signin.mjs';
 import { signoutrouter } from './src/routes/signout.mjs';
 import { currentuserrouter } from './src/routes/current-user.mjs';
+import { forgotpasswordrouter } from './src/routes/forgot-password.mjs';
+import { verifyotprouter } from './src/routes/verify-otp.mjs';
+import { updaterouter } from './src/routes/update.mjs';
 // const swaggerUi = require('swagger-ui-express');
 // const swaggerDocument = require('./swagger.json');
 // const fs = require('fs');
@@ -34,6 +37,9 @@ app.use(signuprouter) ;
 app.use(signinrouter) ;
 app.use(signoutrouter) ;
 app.use(currentuserrouter);
+app.use(forgotpasswordrouter) ;
+app.use(verifyotprouter) ;
+app.use(updaterouter) ;
 
 
 const start = async () =>{
@@ -62,6 +68,7 @@ start() ;
 const jwtErrors = ['TokenExpiredError', 'JsonWebTokenError', 'NotBeforeError'] ;
 
 app.use((err, req,res,next) => {
+    console.log(err) ;
 
 //    console.log(err.name in jwtErrors, 'wow') ;
     if(err && err.statusCode) res.status(err.statusCode).send( err.serializeErrors()) ;
