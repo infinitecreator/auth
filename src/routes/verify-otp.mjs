@@ -51,7 +51,7 @@ router.post('/api/users/verifyotp',
                     email: email,
                     otp: otpSubmitted,
                 }
-              }, JWT_KEY, { expiresIn: '0.05h' }) ;
+              }, JWT_KEY, { expiresIn: '0.025h' }) ;
 
             req.session = {
                 otp: otpToken

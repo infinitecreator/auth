@@ -16,6 +16,9 @@ import { currentuserrouter } from './src/routes/current-user.mjs';
 import { forgotpasswordrouter } from './src/routes/forgot-password.mjs';
 import { verifyotprouter } from './src/routes/verify-otp.mjs';
 import { updaterouter } from './src/routes/update.mjs';
+import { verifyaccountrouter } from './src/routes/verify-account.mjs';
+import { currentotpuserrouter } from './src/routes/current-opt-user.mjs';
+import { googleauthrouter } from './src/routes/google-auth.mjs';
 // const swaggerUi = require('swagger-ui-express');
 // const swaggerDocument = require('./swagger.json');
 // const fs = require('fs');
@@ -30,7 +33,10 @@ app.use(cookieSession( {
     secure: false,
 }
 ));
-app.use(cors()) ;
+app.use(cors({
+    origin: true,      
+    credentials: true
+})) ;
 app.use(bodyParser.urlencoded({ extended: true })) ;
 app.use(bodyParser.json());
 app.use(signuprouter) ;
@@ -40,7 +46,9 @@ app.use(currentuserrouter);
 app.use(forgotpasswordrouter) ;
 app.use(verifyotprouter) ;
 app.use(updaterouter) ;
-
+app.use(verifyaccountrouter) ;
+app.use(currentotpuserrouter) ;
+app.use(googleauthrouter) ;
 
 const start = async () =>{
     // throw new Error(`Cannot start`) ;

@@ -6,10 +6,14 @@ import { User } from '../models/user.mjs';
 import { validationRequest } from '../middlewares/validate-request.mjs'
 import { BadRequestError } from '../errors/bad-request-error.mjs';
 import { Password } from '../services/password.mjs';
+import SendEmail from '../helper/send-email.mjs';
+import otpGenerator from 'otp-generator' ;
 
 const JWT_KEY = "abcdef" ; 
 
 const router = express.Router();
+
+
 
 
 router.post('/api/users/signup',
@@ -44,6 +48,7 @@ router.post('/api/users/signup',
         const firstName = req.body.first_name;
         const lastName = req.body.last_name ;
         const email = req.body.email ;
+        const mobile = req.body.mobile;
         const password = await Password.toHashAsync(req.body.password) ;
         console.log(password, 'hashed version') ;
 
@@ -53,15 +58,21 @@ router.post('/api/users/signup',
             throw new BadRequestError('Email is already in use') ;
         }
 
+        const toVerifyToken = otpGenerator.generate(20, { upperCaseAlphabets: false, specialChars: false });
+
         const newUser = new User({
             firstName: firstName,
             lastName: lastName,
             email: email,
             password: password,
+            mobile: mobile,
+            token: toVerifyToken,
+            upd: (new Date().getTime() / 1000),
+            cat: (new Date().getTime() / 1000)
             
         }) ;
 
-        await newUser.save() ;
+        
 
         const token = jwt.sign({
             data: {
@@ -69,15 +80,39 @@ router.post('/api/users/signup',
                 lastName: lastName,
                 email: email,
                 password: password,
+                mobile: mobile,
+                token: toVerifyToken,
+                upd: (new Date().getTime() / 1000),
+                cat: (new Date().getTime() / 1000)
+                
             }
-          }, JWT_KEY, { expiresIn: '0.1h' }) ;
+          }, JWT_KEY, { expiresIn: '24h' }) ;
                 
 
 
+        
+        const tokenUrl = `http://localhost:4000/api/users/verifyaccount/${token}` ; 
+        const linkUrl = `<a href = ${tokenUrl} > 
+                            Activate your account 
+                        </a>`
+
+        const text = `Your account has been successfully created.
+              Please activate the account from the below link:
+
+              ${linkUrl}
+
+              Thank You
+              System
+
+              `
+
+        const subject = "Account Confirmation"
+        await SendEmail(text,`System <${email}>`,subject);
+        await newUser.save() ;
         req.session = {
             jwt : token,
         }
-        res.status(201).send({message:"Success"}) ;
+        res.status(201).send([{message:"Successfully created Account. Please check the email and acitvate your account before logging in."}]) ;
         
 
     } catch (err){

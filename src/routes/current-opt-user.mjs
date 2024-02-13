@@ -1,13 +1,13 @@
 
 import express from 'express' ;
-import { currentUser } from '../middlewares/current-user.mjs';
+import { verifyOTPUser } from '../middlewares/verify-otp-user.mjs';
 
 
 
 const router = express.Router();
 
-router.get('/api/users/currentuser',
-    currentUser,
+router.get('/api/users/currentotpuser',
+    verifyOTPUser,
     (req, res, next) =>{
         try {
             console.log(req.session) ;
@@ -22,4 +22,4 @@ router.get('/api/users/currentuser',
 
 ) 
 
-export {router as currentuserrouter} ;
+export {router as currentotpuserrouter} ;

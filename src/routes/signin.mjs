@@ -31,6 +31,12 @@ router.post('/api/users/signin',
                 throw new BadRequestError("User is not registered. Please register first");
 
             }
+            if(!user.status){
+                throw new BadRequestError("please register again, this was creadted in develpment mode");
+            }
+            if(user.status!=='active'){
+                throw new BadRequestError("User is not activated, please activate first then try to login.")
+            }
             const password = req?.body?.password ;
             const actual = user.password ;
             // const [actualPassword, salt] = actual.split(":") ;

@@ -7,6 +7,7 @@ import { NotAuthorizedError } from "../errors/jwt-errors/not-authorized-error.mj
 import jwt from 'jsonwebtoken' ;
 import { User } from "../models/user.mjs";
 import { body } from "express-validator";
+import { UserNotExists } from "../errors/user-not-exists.mjs";
 
 
 const router = express.Router() ;
@@ -65,10 +66,32 @@ router.patch('/api/users/update',
             console.log(decoded, 'decoded') ;
     
             const objUpdate = {}
-            if(password) objUpdate.password = Password.toHashAsync(password) ;
-            if(firstName) objUpdate.firstName = firstName ;
-            if(lastName) objUpdate.lastName = lastName ; 
-            const email = decoded.data.email ;
+            if(password) {
+                objUpdate.password = await Password.toHashAsync(password.toString().trim()) ;
+                objUpdate.upd = (new Date().getTime() / 1000) ;
+            }
+            if(firstName) objUpdate.firstName = firstName.toString().trim() ;
+            if(lastName) objUpdate.lastName = lastName.toString().trim() ; 
+            const email = decoded.data.email.toString().trim() ;
+
+            console.log(password, 'password') ;
+            const prevDoc = await User.findOne({
+                'email': email,
+            }) ;
+
+            if(!prevDoc){
+                throw new UserNotExists('No user found with this email id') ;
+            }
+            
+            // console.log(await Password.toHashAsync(password), prevDoc.password, 'pass') ;
+
+            if(password && prevDoc.upd && (new Date().getTime() / 1000)  - prevDoc.upd < 3600){
+                throw new BadRequestError('You can only change your password after 1 hour from last update');
+            }
+            if(prevDoc.password && await Password.toHashAsync(password) === prevDoc.password){
+                throw new BadRequestError('Password cannot be same as previous password') ;
+            }
+            
 
             const updatedDoc = await User.findOneAndUpdate(
                 { "email": email } ,
@@ -79,6 +102,9 @@ router.patch('/api/users/update',
             ) ;
             console.log(email,'email');
             console.log(updatedDoc,'updatedDoc') ;
+            if(password){
+                req.session = null ;
+            }
 
             res.status(202).send([{message:"successfully updated"}]) ;
         

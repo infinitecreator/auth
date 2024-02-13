@@ -5,6 +5,7 @@ import { User } from "../models/user.mjs";
 import { UserNotExists } from "../errors/user-not-exists.mjs";
 import { Otp } from "../models/otp.mjs";
 import otpGenerator from 'otp-generator' ;
+import SendEmail from "../helper/send-email.mjs";
 
 
 
@@ -33,6 +34,14 @@ router.post('/api/users/forgotpassword',
                 exp: (new Date().getTime() / 1000) + 60 ,
                 cat:  new Date().getTime() / 1000 
             })
+            const text = `
+                        The OTP for resetting your password is <h1>${otp}</h1>.
+                        It will expire within 90 seconds.
+                        
+                        Thank You
+                        System
+            `
+            await SendEmail(text, `<${email}>`, "Reset Email")
             await otpObject.save() ;
             
 

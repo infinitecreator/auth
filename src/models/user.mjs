@@ -5,6 +5,15 @@ const userSchema = new mongoose.Schema({
     lastName: String,
     email: String,
     password: String,
+    mobile: String,
+    status: {
+        type: String,
+        enum: ['pending','active'],
+        default: 'pending',
+    },
+    token: String,
+    cat: Date,
+    upd: Date,
 
 }) ;
 
