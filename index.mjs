@@ -32,6 +32,7 @@ app.set('trust proxy', true);
 app.use(cookieSession( {
     signed: false,
     secure: false,
+    sameSite: false,
 }
 ));
 app.use(cors({
