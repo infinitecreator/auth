@@ -31,13 +31,15 @@ const port = 4000 ;
 app.set('trust proxy', true);
 app.use(cookieSession( {
     signed: false,
-    secure: false,
-    sameSite: false,
+    secure: process.env.SECURE_COOKIE,
+    sameSite: 'none',
+    
 }
 ));
 app.use(cors({
-    origin: true,      
-    credentials: true
+    origin: ['http://localhost:3000','https://front-auth.netlify.app'],    
+    credentials: true,
+    allowedHeaders: ['Content-Type', '*']
 })) ;
 app.use(bodyParser.urlencoded({ extended: true })) ;
 app.use(bodyParser.json());
