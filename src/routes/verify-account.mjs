@@ -4,7 +4,8 @@ import jwt from 'jsonwebtoken' ;
 import { UserNotExists } from "../errors/user-not-exists.mjs";
 import { User } from "../models/user.mjs";
 
-
+const FRONTEND_URL = process.env.FRONTEND_URL ;
+const PROTOCOL = process.env.PROTOCOL ;
 
 const router = express.Router() ;
 
@@ -59,7 +60,7 @@ router.get('/api/users/verifyaccount/:token',
                         
                     ) ;
                     res.writeHead(302, {
-                        Location: 'http://localhost:3000/account-verified'
+                        Location: `${PROTOCOL}://${FRONTEND_URL}/account-verified`
                     });
                     res.end();
                     // res.status(200).send([{message: "successfully activated account, you can now login."}])

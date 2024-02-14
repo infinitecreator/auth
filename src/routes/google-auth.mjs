@@ -4,6 +4,8 @@ import { User } from '../models/user.mjs';
 import { header } from 'express-validator';
 import jwt from 'jsonwebtoken' ;
 const router = express.Router() ;
+const FRONTEND_URL = process.env.FRONTEND_URL ;
+const PROTOCOL = process.env.PROTOCOL ;
 
 const JWT_KEY = 'abcdef' ;
 
@@ -76,7 +78,7 @@ router.get('/auth/google/callback', async (req, res, next) => {
         
         
         res.writeHead(302, {
-            Location: 'http://localhost:3000/verify-otp'
+            Location: `${PROTOCOL}://${FRONTEND_URL}/verify-otp`
 
         }) ;
         res.end() ;
@@ -84,7 +86,7 @@ router.get('/auth/google/callback', async (req, res, next) => {
     }
     else {
         res.writeHead(302, {
-            Location: 'http://localhost:3000/homepage'
+            Location: `${PROTOCOL}://${FRONTEND_URL}/homepage`
         });
         res.end();
 
@@ -97,7 +99,7 @@ router.get('/auth/google/callback', async (req, res, next) => {
   } catch (error) {
     // console.error('Error:', error.response.data.error);
     next(error) ;
-    res.redirect('http://localhost:3000/login');
+    res.redirect(`${PROTOCOL}://${FRONTEND_URL}/login`);
   }
 });
 
