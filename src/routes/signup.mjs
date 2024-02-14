@@ -91,7 +91,7 @@ router.post('/api/users/signup',
 
 
         
-        const tokenUrl = `http://localhost:4000/api/users/verifyaccount/${token}` ; 
+        const tokenUrl = `${process.env.PROTOCOL}://${process.env.BACKEND_URL}/api/users/verifyaccount/${token}` ; 
         const linkUrl = `<a href = ${tokenUrl} > 
                             Activate your account 
                         </a>`
