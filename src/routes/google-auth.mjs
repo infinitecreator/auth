@@ -12,7 +12,7 @@ const JWT_KEY = 'abcdef' ;
 
 const CLIENT_ID = '1074632169173-4d3glrbd9antddg253r7mkkp46q468e0.apps.googleusercontent.com';
 const CLIENT_SECRET = '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';
-const REDIRECT_URI = '${process.env.PROTOCOL}://${process.env.BACKEND_URL}/auth/google/callback';
+const REDIRECT_URI = `${process.env.PROTOCOL}://${process.env.BACKEND_URL}/auth/google/callback`;
 
 // Initiates the Google Login flow
 router.get('/auth/google', (req, res) => {
