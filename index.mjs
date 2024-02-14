@@ -4,6 +4,7 @@ import express from 'express' ;
 const app = express() ;
 // const cors = require('cors')
 import cors from 'cors' ;
+import 'dotenv/config' ;
 // const bodyParser = require('body-parser');
 import bodyParser from 'body-parser' ;
 import cookieSession from 'cookie-session' ;
@@ -50,11 +51,15 @@ app.use(verifyaccountrouter) ;
 app.use(currentotpuserrouter) ;
 app.use(googleauthrouter) ;
 
+// const MONGO_URI = process.env.MONGO_URI ;
+// console.log(process.env,'env'); 
+console.log(`mongodb+srv://xrniraj:${encodeURIComponent('Neverknow123@')}@auth.ueq5owu.mongodb.net/?retryWrites=true&w=majority`) ;
+
 const start = async () =>{
     // throw new Error(`Cannot start`) ;
     try{
-        await mongoose.connect('mongodb://localhost:27017/nodejs-auth');
-        console.log('connected to mongodb') ;
+        await mongoose.connect(`mongodb+srv://xrniraj:Theniraj123@auth.ueq5owu.mongodb.net/?retryWrites=true&w=majority`) ;
+        console.log('connected to mongodb cloud instance') ;
 
     } catch(err){
         // console.log(err) ;
