@@ -73,7 +73,7 @@ const start = async () =>{
 
     }
 
-    app.listen(port, () =>{
+    app.listen(port, '0.0.0.0', () =>{
         console.log(`the app is listening on port ${port}`) ;
     
     }) ;
