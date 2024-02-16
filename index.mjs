@@ -25,7 +25,7 @@ import { googleauthrouter } from './src/routes/google-auth.mjs';
 // const fs = require('fs');
 // const customCss = fs.readFileSync((process.cwd()+"/swagger.css"), 'utf8');
 
-const port = 4000 ;
+const port = `${process.env.BACKEND_PORT}` ;
 
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, customCss)) ;
 app.set('trust proxy', true);
