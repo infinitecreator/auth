@@ -92,9 +92,9 @@ router.post('/api/users/signup',
 
         
         const tokenUrl = `${process.env.PROTOCOL}://${process.env.BACKEND_URL}/api/users/verifyaccount/${token}` ; 
-        const linkUrl = `<a href = ${tokenUrl} > 
-                            Activate your account 
-                        </a>`
+        const linkUrl = `${tokenUrl} 
+                        Activate your account 
+                        `
 
         const text = `Your account has been successfully created.
               Please activate the account from the below link:
