@@ -102,7 +102,9 @@ router.patch('/api/users/update',
             ) ;
             console.log(email,'email');
             console.log(updatedDoc,'updatedDoc') ;
-            if(password){
+            console.log(prevDoc,'prevdoc') ;
+            if(prevDoc.password && password){
+                console.log('reached here') ;
                 req.session = null ;
             }
 
